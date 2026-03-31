@@ -1,7 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include <memory>
+#include <queue>
 
 template<typename T>
 struct Node
@@ -31,6 +33,8 @@ private:
 			insertRecurs(root->left, data);
 		else if (data > treeRoot.get()->data)
 			insertRecurs(root->right, data);
+
+		treeSize++;
 	}
 
 	void removeRecurs(std::unique_ptr<Node<T>>& root, const T& data)
@@ -111,3 +115,37 @@ public:
 	}
 };
 
+struct TrieNode
+{
+	std::string data;
+	// turn this vector into a std::unique_ptr vector
+	std::vector<TrieNode*> children;
+	bool isLeaf;
+
+	TrieNode()
+		: data(""), children({}), isLeaf(false) { }
+	TrieNode(const std::string& data)
+		: data(data), children({}), isLeaf(false) { }
+	TrieNode(const std::string& data, const std::vector<TrieNode*>& children)
+		: data(data), children(children), isLeaf(false) { }
+};
+
+class TrieDictionary
+{
+private:
+	std::unique_ptr<TrieNode> treeRoot = nullptr;
+
+public:
+	TrieDictionary() = default;
+	TrieDictionary(const std::string& value);
+
+	void insert(const std::string& value);
+	void remove(const std::string& value);
+
+	const bool breadthFirstSearch(const std::string& value) const;
+	const bool depthFirstSearch(const std::string& value) const;
+
+	const TrieNode* root() const;
+	const bool isLeaf(TrieNode* node) const;
+		
+};
