@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <queue>
+#include <cctype>
 
 template<typename T>
 struct Node
@@ -117,17 +118,25 @@ public:
 
 struct TrieNode
 {
-	std::string data;
-	// turn this vector into a std::unique_ptr vector
+	char8_t data;
+	//std::vector<std::unique_ptr<TrieNode>> children;
 	std::vector<TrieNode*> children;
 	bool isLeaf;
 
 	TrieNode()
-		: data(""), children({}), isLeaf(false) { }
-	TrieNode(const std::string& data)
-		: data(data), children({}), isLeaf(false) { }
-	TrieNode(const std::string& data, const std::vector<TrieNode*>& children)
+		: data(' '), children(std::vector<TrieNode*>(26)), isLeaf(false) { }
+	TrieNode(const char8_t& data)
+		: data(data), children(std::vector<TrieNode*>(26)), isLeaf(false) { }
+	//TrieNode(const std::string& data, const std::vector<std::unique_ptr<TrieNode>>& children)
+	//	: data(data), children(children), isLeaf(false) { }
+	TrieNode(const char8_t& data, const std::vector<TrieNode*>& children)
 		: data(data), children(children), isLeaf(false) { }
+};
+
+struct Language
+{
+	char8_t startOfAlphabet;
+	int lettersInAlphabet;
 };
 
 class TrieDictionary
@@ -135,17 +144,30 @@ class TrieDictionary
 private:
 	std::unique_ptr<TrieNode> treeRoot = nullptr;
 
+	/*
+	* @returns The uppercase or lowercase of argument c, depending on the case of the ref
+	*/
+	char copyCase(const char& c, const char& ref);
+
 public:
 	TrieDictionary() = default;
 	TrieDictionary(const std::string& value);
 
 	void insert(const std::string& value);
-	void remove(const std::string& value);
 
-	const bool breadthFirstSearch(const std::string& value) const;
-	const bool depthFirstSearch(const std::string& value) const;
+	void remove(const char8_t& value);
 
+	// Pending documentation
+	const bool breadthFirstSearch(const char8_t& value) const;
+
+	// Pending documentation
+	const bool depthFirstSearch(const char8_t& value) const;
+
+	/*
+	* @returns treeRoot
+	*/
 	const TrieNode* root() const;
+
 	const bool isLeaf(TrieNode* node) const;
 		
 };

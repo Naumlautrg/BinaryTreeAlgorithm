@@ -15,9 +15,17 @@ void demoBinaryTree()
 	inty.preorderPrint();
 }
 
+void demoTrie()
+{
+	TrieDictionary dict;
+
+	dict.insert("Word");
+}
+
 int main()
 {
-	demoBinaryTree();
+	//demoBinaryTree();
+	demoTrie();
 
 	return 0;
 }
