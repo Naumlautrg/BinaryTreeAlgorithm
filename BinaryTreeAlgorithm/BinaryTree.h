@@ -11,6 +11,7 @@
 		This is needed for unicode functionality so that any language can be inserted into a TrieDictionary. */
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
+#include <unicode/normalizer2.h>
 
 template<typename T>
 struct Node
@@ -125,15 +126,20 @@ public:
 struct TrieNode
 {
 	/* A unorded_map is used for its low space complexity and fast lookup speed.
-		A vector or array *could* be used, but would be unkind in its memory usage since we plan on inserting very large amounts of elements */
+		A vector or array *could* be used, but would be not be ideal in its spatial usage 
+		since we plan on inserting very large amounts of elements (the initial case being the entire english dictionary) 
+		
+		Although this implementation with char32_t works and is ideal, 
+		it does not account for the rare case in some languages where an uppercase or lowercase letter spans multiple characters
+		A simple but heavy performance-cost solution is to use std::u32string instead, but better is to normalize and case-fold input 
+		(which is done with normalizeToUtf32)*/
 
-	std::u32string data;
-	//std::vector<std::unique_ptr<TrieNode>> children;
-	std::unordered_map<std::u32string, std::unique_ptr<TrieNode>> children;
+	char32_t data;
+	std::unordered_map<char32_t, std::unique_ptr<TrieNode>> children;
 	bool isLeaf = false;
 
-	TrieNode(const std::u32string& str = U"")
-		: data(str) { }
+	TrieNode(const char32_t& ch = U' ')
+		: data(ch) { }
 };
 
 class TrieDictionary
@@ -142,28 +148,27 @@ private:
 	std::unique_ptr<TrieNode> treeRoot = std::make_unique<TrieNode>();
 
 	std::u32string utf8ToUtf32(const std::string& str) const;
+	std::string utf32ToUtf8(const std::u32string& str) const;
+	std::u32string normalizeToUtf32(const std::string& str);
 
 	void insertRecurs(const std::u32string& u32str);
 	bool removeRecurs(TrieNode* root, const std::u32string& key, size_t index);
 
-	//bool depthFirstSearchRecurs(const TrieNode* node, const std::u32string& key, size_t index) const;
+	/* Recursively collects the words beginning with the prefix input */
+	void prefixCollection(const TrieNode* node, std::u32string& currentWord, std::vector<std::string>& words) const;
 
 public:
 	TrieDictionary() = default;
 	TrieDictionary(const std::string& value);
 
 	void insert(const std::string& value);
-	void insert(const std::u32string& value);
-
 	bool remove(const std::string& value);
-	bool remove(const std::u32string& value);
 
-	const bool depthFirstSearch(const std::string& value) const;
-	const bool depthFirstSearch(const std::u32string& value) const;
-	bool directSearch(const std::string& value) const;
-	bool directSearch(const std::u32string& value) const;
-	/* Returns a vector containing all of the valid words found during traversal. */
-	const std::vector<std::u32string> directSearchAll(const std::string& value) const;
+	bool contains(const std::string& value) const;
+	/* Returns a vector containing all of the words found during traversal. */
+	const std::vector<std::string> inclusiveSearch(const std::string& value);
+	/* Returns a vector containing all of the words beginning with the value (autocomplete). */
+	const std::vector<std::string> exclusiveSearch(const std::string& value);
 
 	/*
 	* @returns treeRoot

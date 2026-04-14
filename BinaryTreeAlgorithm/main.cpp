@@ -19,17 +19,26 @@ void demoBinaryTree()
 void demoTrie()
 {
 	TrieDictionary dict;
-	dict.insert("Wotonon");
+	dict.insert("Wortonon");
+	dict.insert("Wod");
 	dict.insert("Wo");
 	dict.insert("Wor");
 	dict.insert("Word");
-	std::cout << dict.directSearch("Word") << "\n";
-	std::vector<std::u32string> words = dict.directSearchAll("Word");
+	dict.insert("Worda");
+	dict.insert("anotherWord");
+	std::cout << std::boolalpha << dict.contains("Word") << "\n";
+	std::vector<std::string> words = dict.inclusiveSearch("Word");
 	for (int i = 0; i < words.size(); ++i)
 	{
-		icu::UnicodeString ustr = icu::UnicodeString::fromUTF32(
-			reinterpret_cast<const UChar32*>(words[i].c_str()), words[i].length());
-		std::cout << ustr << "\n";
+		std::cout << words[i] << "\n";
+	}
+
+	std::cout << "\n";
+
+	std::vector<std::string> searchResults = dict.exclusiveSearch("Word");
+	for (int i = 0; i < searchResults.size(); ++i)
+	{
+		std::cout << searchResults[i] << "\n";
 	}
 }
 
