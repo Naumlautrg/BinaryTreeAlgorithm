@@ -6,9 +6,6 @@
 #include <fstream>
 #include <unordered_map>
 
-/*	!!! Requires the "icu" vcpkg package
-		vcpkg install icu
-		This is needed for unicode functionality so that any language can be inserted into a TrieDictionary. */
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
 #include <unicode/normalizer2.h>

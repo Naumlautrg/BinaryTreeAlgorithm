@@ -48,6 +48,8 @@ std::u32string TrieDictionary::normalizeToUtf32(const std::string& str)
 		result.push_back(static_cast<char32_t>(c));
 		i += U16_LENGTH(c);
 	}
+
+	return result;
 }
 
 void TrieDictionary::insertRecurs(const std::u32string& u32Str)
