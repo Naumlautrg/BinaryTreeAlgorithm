@@ -32,7 +32,7 @@ std::u32string TrieDictionary::normalizeToUtf32(const std::string& str)
 
 	icu::UnicodeString ustr = icu::UnicodeString::fromUTF8(str);
 
-	// magic icu code to be interpreted and understood at a later (imminent) date
+	// magic icu code to be interpreted and understood at a later date
 	const icu::Normalizer2* normalizer = icu::Normalizer2::getNFCInstance(errorCode);
 	icu::UnicodeString normalized;
 	normalizer->normalize(ustr, normalized, errorCode);
@@ -48,6 +48,8 @@ std::u32string TrieDictionary::normalizeToUtf32(const std::string& str)
 		result.push_back(static_cast<char32_t>(c));
 		i += U16_LENGTH(c);
 	}
+
+	return result;
 }
 
 void TrieDictionary::insertRecurs(const std::u32string& u32Str)
@@ -126,15 +128,17 @@ bool TrieDictionary::remove(const std::string& value)
 	return removeRecurs(treeRoot.get(), utf32Str, 0);
 }
 
+void TrieDictionary::clear()
+{
+	treeRoot.get()->children.clear();
+}
+
 bool TrieDictionary::contains(const std::string& value) const
 {
 	const TrieNode* root = treeRoot.get();
 
 	for (char32_t ch : value)
 	{
-		/* This creates a temporary utf32string for every character in the utf32Str variable
-			Not performant at all, will probably replace later */
-
 		auto it = root->children.find(ch);
 		if (it == root->children.end())
 			return false;

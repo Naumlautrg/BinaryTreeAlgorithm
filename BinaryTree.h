@@ -6,9 +6,6 @@
 #include <fstream>
 #include <unordered_map>
 
-/*	!!! Requires the "icu" vcpkg package
-		vcpkg install icu
-		This is needed for unicode functionality so that any language can be inserted into a TrieDictionary. */
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
 #include <unicode/normalizer2.h>
@@ -125,14 +122,14 @@ public:
 
 struct TrieNode
 {
-	/* A unorded_map is used for its low space complexity and fast lookup speed.
+	/* A unordered_map is used for its low space complexity and fast lookup speed.
 		A vector or array *could* be used, but would be not be ideal in its spatial usage 
 		since we plan on inserting very large amounts of elements (the initial case being the entire english dictionary) 
 		
 		Although this implementation with char32_t works and is ideal, 
 		it does not account for the rare case in some languages where an uppercase or lowercase letter spans multiple characters
 		A simple but heavy performance-cost solution is to use std::u32string instead, but better is to normalize and case-fold input 
-		(which is done with normalizeToUtf32)*/
+		(which is done in normalizeToUtf32)*/
 
 	char32_t data;
 	std::unordered_map<char32_t, std::unique_ptr<TrieNode>> children;
@@ -163,18 +160,22 @@ public:
 
 	void insert(const std::string& value);
 	bool remove(const std::string& value);
+	/*
+		Removes all nodes in the tree excluding the root.
+	*/
+	void clear();
 
 	bool contains(const std::string& value) const;
-	/* Returns a vector containing all of the words found during traversal. */
+	/* 
+		Returns a vector containing all of the words found during traversal. 
+	*/
 	const std::vector<std::string> inclusiveSearch(const std::string& value);
-	/* Returns a vector containing all of the words beginning with the value (autocomplete). */
+	/* 
+		Returns a vector containing all of the words beginning with the value (autocomplete). 
+	*/
 	const std::vector<std::string> exclusiveSearch(const std::string& value);
 
-	/*
-	* @returns treeRoot
-	*/
 	const TrieNode* root() const;
-
 	const bool isLeaf(TrieNode* node) const;
 		
 };

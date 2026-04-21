@@ -1,7 +1,14 @@
+/* This program autocompletes words input by the user and allow for searching for words within a target dictionary.
+	English word list file sourced from https://github.com/dwyl/english-words 
+
+	Requires the "icu" vcpkg
+*/
 #include <iostream>
+#include <fstream>
+#include <unicode/ustream.h>
 
 #include "BinaryTree.h"
-#include <unicode/ustream.h>
+#include "MainThread.h"
 
 void demoBinaryTree()
 {
@@ -26,7 +33,9 @@ void demoTrie()
 	dict.insert("Word");
 	dict.insert("Worda");
 	dict.insert("anotherWord");
+
 	std::cout << std::boolalpha << dict.contains("Word") << "\n";
+
 	std::vector<std::string> words = dict.inclusiveSearch("Word");
 	for (int i = 0; i < words.size(); ++i)
 	{
@@ -40,10 +49,19 @@ void demoTrie()
 	{
 		std::cout << searchResults[i] << "\n";
 	}
+
+	dict.clear();
+	words = dict.inclusiveSearch("Word");
+	for (int i = 0; i < words.size(); ++i)
+	{
+		std::cout << words[i] << "\n";
+	}
 }
 
 int main()
 {
+
+	// Demos
 	//demoBinaryTree();
 	demoTrie();
 
