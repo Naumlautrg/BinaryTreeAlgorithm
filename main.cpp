@@ -1,15 +1,13 @@
 /* This program autocompletes words input by the user and allow for searching for words within a target dictionary.
 	English word list file sourced from https://github.com/dwyl/english-words 
 
-	Requires the "icu" vcpkg and cpp-terminal library to run
+	Requires the "icu" vcpkg
 */
 #include <iostream>
 #include <fstream>
+#include <unicode/ustream.h>
 
 #include "BinaryTree.h"
-#include "cpp-terminal/cpp-terminal/terminal.hpp"
-
-#include <unicode/ustream.h>
 
 void demoBinaryTree()
 {

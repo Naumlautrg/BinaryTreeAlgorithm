@@ -129,7 +129,7 @@ struct TrieNode
 		Although this implementation with char32_t works and is ideal, 
 		it does not account for the rare case in some languages where an uppercase or lowercase letter spans multiple characters
 		A simple but heavy performance-cost solution is to use std::u32string instead, but better is to normalize and case-fold input 
-		(which is done with normalizeToUtf32)*/
+		(which is done in normalizeToUtf32)*/
 
 	char32_t data;
 	std::unordered_map<char32_t, std::unique_ptr<TrieNode>> children;
