@@ -8,6 +8,7 @@
 #include <unicode/ustream.h>
 
 #include "BinaryTree.h"
+#include "MainThread.h"
 
 void demoBinaryTree()
 {
@@ -32,7 +33,9 @@ void demoTrie()
 	dict.insert("Word");
 	dict.insert("Worda");
 	dict.insert("anotherWord");
+
 	std::cout << std::boolalpha << dict.contains("Word") << "\n";
+
 	std::vector<std::string> words = dict.inclusiveSearch("Word");
 	for (int i = 0; i < words.size(); ++i)
 	{
@@ -46,11 +49,17 @@ void demoTrie()
 	{
 		std::cout << searchResults[i] << "\n";
 	}
+
+	dict.clear();
+	words = dict.inclusiveSearch("Word");
+	for (int i = 0; i < words.size(); ++i)
+	{
+		std::cout << words[i] << "\n";
+	}
 }
 
 int main()
 {
-	std::ofstream dictionaryFile("");
 
 	// Demos
 	//demoBinaryTree();

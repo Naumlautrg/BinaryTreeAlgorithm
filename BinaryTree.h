@@ -122,7 +122,7 @@ public:
 
 struct TrieNode
 {
-	/* A unorded_map is used for its low space complexity and fast lookup speed.
+	/* A unordered_map is used for its low space complexity and fast lookup speed.
 		A vector or array *could* be used, but would be not be ideal in its spatial usage 
 		since we plan on inserting very large amounts of elements (the initial case being the entire english dictionary) 
 		
@@ -160,18 +160,22 @@ public:
 
 	void insert(const std::string& value);
 	bool remove(const std::string& value);
+	/*
+		Removes all nodes in the tree excluding the root.
+	*/
+	void clear();
 
 	bool contains(const std::string& value) const;
-	/* Returns a vector containing all of the words found during traversal. */
+	/* 
+		Returns a vector containing all of the words found during traversal. 
+	*/
 	const std::vector<std::string> inclusiveSearch(const std::string& value);
-	/* Returns a vector containing all of the words beginning with the value (autocomplete). */
+	/* 
+		Returns a vector containing all of the words beginning with the value (autocomplete). 
+	*/
 	const std::vector<std::string> exclusiveSearch(const std::string& value);
 
-	/*
-	* @returns treeRoot
-	*/
 	const TrieNode* root() const;
-
 	const bool isLeaf(TrieNode* node) const;
 		
 };
