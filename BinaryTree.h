@@ -160,12 +160,14 @@ public:
 
 	void insert(const std::string& value);
 	bool remove(const std::string& value);
+
 	/*
 		Removes all nodes in the tree excluding the root.
 	*/
 	void clear();
 
 	bool contains(const std::string& value) const;
+
 	/* 
 		Returns a vector containing all of the words found during traversal. 
 	*/
