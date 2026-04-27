@@ -122,8 +122,8 @@ public:
 
 struct TrieNode
 {
-	/* A unordered_map is used for its low space complexity and fast lookup speed.
-		A vector or array *could* be used, but would be not be ideal in its spatial usage 
+	/* An unordered_map is used for its low space complexity and fast lookup speed.
+		A vector *could* be used, but would be not be ideal in its spatial usage 
 		since we plan on inserting very large amounts of elements (the initial case being the entire english dictionary) 
 		
 		Although this implementation with char32_t works and is ideal, 
@@ -151,7 +151,7 @@ private:
 	void insertRecurs(const std::u32string& u32str);
 	bool removeRecurs(TrieNode* root, const std::u32string& key, size_t index);
 
-	/* Recursively collects the words beginning with the prefix input */
+	/* Recursively collects the words beginning with the prefix input. */
 	void prefixCollection(const TrieNode* node, std::u32string& currentWord, std::vector<std::string>& words) const;
 
 public:
@@ -160,12 +160,14 @@ public:
 
 	void insert(const std::string& value);
 	bool remove(const std::string& value);
+
 	/*
 		Removes all nodes in the tree excluding the root.
 	*/
 	void clear();
 
 	bool contains(const std::string& value) const;
+
 	/* 
 		Returns a vector containing all of the words found during traversal. 
 	*/

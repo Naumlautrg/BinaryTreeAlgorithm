@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <unicode/ustream.h>
+#include <exception>
 
 #include "BinaryTree.h"
 #include "MainThread.h"
@@ -60,10 +61,19 @@ void demoTrie()
 
 int main()
 {
+	try
+	{
+		// Demos
+		//demoBinaryTree();
+		//demoTrie();
 
-	// Demos
-	//demoBinaryTree();
-	demoTrie();
+		MainThread m;
+		m.start();
 
-	return 0;
+		return 0;
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << "Error occurred: " << e.what() << "\n\n";
+	}
 }
