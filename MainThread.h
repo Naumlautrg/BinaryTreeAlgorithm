@@ -3,6 +3,8 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <algorithm>
+#include <ranges>
 
 #include "BinaryTree.h"
 
@@ -50,29 +52,48 @@ private:
 		return true;
 	}
 
+	size_t longestStringLength(const std::vector<std::string>& stringVector)
+	{
+		/*
+		* Using ranges to find the longest length string:
+		* {} is the default comparison (std::ranges::less in this instance)
+		* &std::string::size calls .size() on each string before comparison, called a projection
+		* The difference between std::ranges::max_element and std::max_element is that it accepts containers and supports projections
+		*/
+		auto longestStringIt = std::ranges::max_element(stringVector, {}, &std::string::size);
+		if (longestStringIt != stringVector.end())
+		{
+			std::string longestString = *longestStringIt;
+			return longestString.length();
+		}
+		return 0;
+	}
+
 	const std::string getLanguageFilePath(const Language& language) const;
 	bool dumpLanguage();
 
 	/*
-		Display Methods
+		Print Methods
 	*/
 	
-	// Displays a line of dashes after displaying the input string with the exact length of the input string.
-	void displayDashLine(const std::string& s, bool newLineAfter = true);
-	// Displays a line of dashes with the input length.
-	void displayDashLine(const int& length, bool newLineAfter = true);
-	void displayLanguageOptions();
-	// Returns false when user enters the exit option.
-	void displayDictionaryOptions();
+	/* Prints a line of dashes with the exact length of the input string, immediately afte displaying the input string. */
+	void printDashLine(const std::string& s, bool newLineAfter = true);
+	/* Prints a line of dashes with the input length. */
+	void printDashLine(int length, bool newLineAfter = true);
+	void printLanguageOptions();
+	void printDictionaryOptions();
+	void printChosenDictionaryOption(int chosenOption);
 
 	/*
 		Methods requiring user input
 	*/
 
+	/* Returns false when the language option does not exist or the input is invalid. */
 	bool chooseLanguage();
+	/* Returns false when the user enters the exit option. */
 	bool chooseDictionaryOption();
 	bool autocomplete();
-	bool spellcheck();
+	bool definitionLookup();
 	bool findWord();
 
 public:
