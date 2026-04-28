@@ -1,7 +1,14 @@
-/* This program autocompletes words input by the user and allow for searching for words within a target dictionary.
-	English word list file sourced from https://github.com/dwyl/english-words 
+/*
+	This program autocompletes words input by the user and allows for searching for words within a target dictionary.
+	With internet connection, the user can also search definitions of any words listed in the Free Dictionary API (https://dictionaryapi.dev/)
+	English word list file source https://github.com/dwyl/english-words 
+	Spanish word list file source https://github.com/xavier-hernandez/spanish-wordlist
 
-	Requires the "icu" vcpkg
+	This program also requires three libraries/packages in order to successfully build and compile.
+	Each library was installed using the package manager "vcpkg"
+	vcpkg install icu (for unicode)
+	vcpkg install cpr (c++ requests, wrapper around libcurl for http requests)
+	vcpkg install nlohmann-json (for reading json files, in our case the data provided from the Free Dictionary API)
 */
 #include <iostream>
 #include <fstream>
