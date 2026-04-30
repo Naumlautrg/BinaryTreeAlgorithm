@@ -11,6 +11,8 @@
 
 #include "BinaryTree.h"
 
+#undef max // one of the header files defines this, it gets in the way and we don't need it
+
 enum class Language
 {
 	English,
@@ -56,25 +58,11 @@ private:
 		return true;
 	}
 
-	size_t longestStringLength(const std::vector<std::string>& stringVector)
-	{
-		/*
-		* Using ranges to find the longest length string:
-		* {} is the default comparison (std::ranges::less in this instance)
-		* &std::string::size calls .size() on each string before comparison, called a projection
-		* The difference between std::ranges::max_element and std::max_element is that it accepts containers and supports projections
-		*/
-		auto longestStringIt = std::ranges::max_element(stringVector, {}, &std::string::size);
-		if (longestStringIt != stringVector.end())
-		{
-			std::string longestString = *longestStringIt;
-			return longestString.length();
-		}
-		return 0;
-	}
-
+	size_t longestStringLength(const std::vector<std::string>& stringVector);
 	const std::string getLanguageFilePath(const Language& language) const;
 	bool dumpLanguage();
+	/* Only works for English for now */
+	std::vector<std::string> getDefinitions(const std::string& word) const;
 
 	/*
 		Print Methods
@@ -98,7 +86,7 @@ private:
 	bool chooseDictionaryOption();
 	bool autocomplete();
 	bool definitionLookup();
-	bool findWord();
+	bool checkWord();
 
 public:
 	MainThread() = default;

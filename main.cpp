@@ -52,7 +52,7 @@ void demoTrie()
 
 	std::cout << "\n";
 
-	std::vector<std::string> searchResults = dict.exclusiveSearch("Word");
+	std::vector<std::string> searchResults = dict.prefixSearch("Word");
 	for (int i = 0; i < searchResults.size(); ++i)
 	{
 		std::cout << searchResults[i] << "\n";

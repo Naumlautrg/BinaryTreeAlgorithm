@@ -175,7 +175,7 @@ public:
 	/* 
 		Returns a vector containing all of the words beginning with the value (autocomplete). 
 	*/
-	const std::vector<std::string> exclusiveSearch(const std::string& value);
+	const std::vector<std::string> prefixSearch(const std::string& value);
 
 	const TrieNode* root() const;
 	const bool isLeaf(TrieNode* node) const;

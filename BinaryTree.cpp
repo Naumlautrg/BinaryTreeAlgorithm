@@ -177,7 +177,7 @@ const std::vector<std::string> TrieDictionary::inclusiveSearch(const std::string
 		return {};
 }
 
-const std::vector<std::string> TrieDictionary::exclusiveSearch(const std::string& value)
+const std::vector<std::string> TrieDictionary::prefixSearch(const std::string& value)
 {
 	std::vector<std::string> foundWords = std::vector<std::string>();
 	std::u32string utf32Str = normalizeToUtf32(value);
