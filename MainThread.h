@@ -62,7 +62,7 @@ private:
 	const std::string getLanguageFilePath(const Language& language) const;
 	bool dumpLanguage();
 	/* Only works for English for now */
-	std::vector<std::string> getDefinitions(const std::string& word) const;
+	std::vector<std::string> getDefinitions(const std::string& word);
 
 	/*
 		Print Methods

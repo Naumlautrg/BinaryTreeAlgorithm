@@ -63,10 +63,10 @@ bool MainThread::dumpLanguage()
 	return true;
 }
 
-std::vector<std::string> MainThread::getDefinitions(const std::string& word) const
+std::vector<std::string> MainThread::getDefinitions(const std::string& word)
 {
 	std::vector<std::string> definitions;
-	std::string url = "https://api.dictionaryapi.dev/api/v2/entires/en/" + word;
+	std::string url = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word;
 
 	cpr::Response r = cpr::Get(cpr::Url(url));
 	const long SUCCESS_CODE = 200;
@@ -79,11 +79,10 @@ std::vector<std::string> MainThread::getDefinitions(const std::string& word) con
 			You'll have to look at the API example to understand how the data is ordered
 			https://dictionaryapi.dev/
 		*/
-		for (int i = 0; i < data[0]["meanings"].size(); ++i)
-		{
-			std::string definition = data[0]["meanings"][0]["definitions"][i]["definition"];
-			definitions.push_back(definition);
-		}
+		for (const auto& meaning : data[0]["meanings"])
+			for (const auto& definition : meaning["definitions"])
+				definitions.push_back(definition["definition"]);
+
 		return definitions;
 	}
 	else
@@ -234,7 +233,9 @@ bool MainThread::autocomplete()
 		if (prompt(booleanInput))
 			if (std::toupper(booleanInput) == OPTION_YES)
 				resultDisplayCount = std::clamp(resultDisplayCount, wordsFound.size(), _CRT_SIZE_MAX);
-																					// _CRT_SIZE_MAX = maximum value for size_t - 1
+		// _CRT_SIZE_MAX = maximum value for size_t - 1
+			else
+				resultDisplayCount = std::clamp(resultDisplayCount, static_cast<size_t>(0), wordsFound.size());
 
 		int dashLineLength = static_cast<int>(longestStringLength(wordsFound));
 		printDashLine(dashLineLength);
@@ -271,7 +272,7 @@ bool MainThread::definitionLookup()
 			
 			printDashLine(dashLineLength);
 			std::cout << "Definitions for " << input << ":\n";
-			for (size_t i = definitions.size(); i > 0; i--) // Printing from bottom to top of vector
+			for (size_t i = 0; i < definitions.size(); ++i)
 			{
 				std::cout << definitions[i] << "\n";
 			}
