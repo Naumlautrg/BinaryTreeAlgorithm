@@ -34,9 +34,17 @@ std::u32string TrieDictionary::normalizeToUtf32(const std::string& str)
 
 	// magic icu code to be interpreted and understood at a later date
 	const icu::Normalizer2* normalizer = icu::Normalizer2::getNFCInstance(errorCode);
+	/* NFC - Normalization Form Canonical Composition, a Unicode standard 
+		Basically, converts strings into combined code points rather than separate characters
+		and accent marks so that character matching is more consistent.
+
+		This normalization process is necessary because although utf-32 characters may visually resemble utf-8,
+		they are different in binary, which can cause false mismatches.
+		
+		The normalizer is a unmodifiable singleton instance */
 	icu::UnicodeString normalized;
 	normalizer->normalize(ustr, normalized, errorCode);
-
+	
 	normalized.foldCase();
 
 	std::u32string result;
@@ -107,7 +115,7 @@ void TrieDictionary::prefixCollection(const TrieNode* node, std::u32string& curr
 		words.push_back(utf32ToUtf8(currentWord));
 
 	// Exploring all children for what might come next in the loop below
-	// "const auto& [ch, child]" this is called structured binding, very cool
+	// "const auto& [ch, child]" this is called structured binding, useful for loops through key-value pairs
 	for (const auto& [ch, child] : node->children)
 	{
 		currentWord.push_back(ch);
@@ -139,7 +147,7 @@ bool TrieDictionary::contains(const std::string& value) const
 
 	for (char32_t ch : value)
 	{
-		auto it = root->children.find(ch);
+		auto it = root->children.find(std::tolower(ch));
 		if (it == root->children.end())
 			return false;
 
@@ -177,7 +185,7 @@ const std::vector<std::string> TrieDictionary::inclusiveSearch(const std::string
 		return {};
 }
 
-const std::vector<std::string> TrieDictionary::exclusiveSearch(const std::string& value)
+const std::vector<std::string> TrieDictionary::prefixSearch(const std::string& value)
 {
 	std::vector<std::string> foundWords = std::vector<std::string>();
 	std::u32string utf32Str = normalizeToUtf32(value);
